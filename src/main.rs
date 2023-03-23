@@ -141,12 +141,13 @@ async fn download_pdf(
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
-    if args.len() != 2 {
+    if args.len() < 2 {
         println!("Usage: sched <name>");
         return Ok(());
     }
 
-    let name = get_normalized_name(&args[1]);
+    let name = args[1..].join(" ");
+    let name = get_normalized_name(&name);
     println!("Getting schedule for {}", name);
 
     let url = match find_pdf_link(&name).await {
